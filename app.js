@@ -43,7 +43,10 @@ app.use(session({
     saveUninitialized: true
 }));
 
-
+app.use(function(req, res, next){
+    res.locals.user = req.session.user;
+    next();
+});
 app.use('/', login);
 app.use('/login', login);
 app.use("/lib",express.static( 'node_modules'));
@@ -51,15 +54,15 @@ app.use('/public',express.static('public'));
 app.use('/checklog', checklog);
 app.use('/quit', quit);
 
-app.use(function (req, res, next) {
-    if(req.url!='/login' && req.session.user == null) {
-        console.log('请先登录');
-        res.redirect('/');
-        return;
-    }
-    app.locals.user = req.session.user;
-    next();
-});
+//app.use(function (req, res, next) {
+//    if(req.url!='/login' && req.session.user == null) {
+//        console.log('请先登录');
+//        res.redirect('/');
+//        return;
+//    }
+//    app.locals.user = req.session.user;
+//    next();
+//});
 
 app.use('/index', index);
 app.use('/users', users);

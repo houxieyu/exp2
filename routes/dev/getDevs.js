@@ -8,13 +8,14 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
     //数据库连接
     var MongoClient = require('mongodb').MongoClient;
-    var DB_CONN_STR = 'mongodb://localhost:27017/pm25'; //# 数据库为 runoob
-    MongoClient.connect(DB_CONN_STR, function(err, db) {
+
+    MongoClient.connect(global.dburl, function(err, db) {
         //连接到表
         var collection = db.collection('devices');
         collection.find().toArray(function(err, result) {
             res.json(result);
         });
+        db.close();
     });
 });
 module.exports = router;

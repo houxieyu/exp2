@@ -5,16 +5,20 @@ var dgram = require('dgram');
 var moment = require('moment');
 var serverSocket = dgram.createSocket('udp4');
 
-const readline = require('readline');
-
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
+//    err - Error object, https://nodejs.org/api/errors.html
+serverSocket.on('error', function(err){
+    console.log('error, msg - %s, stack - %s\n', err.message, err.stack);
 });
+
+serverSocket.on('listening', function(){
+    console.log("echo server is listening on port "+global.listenport+".");
+})
+
+serverSocket.bind(global.listenport);
+
 //数据库连接
 var MongoClient = require('mongodb').MongoClient;
-var DB_CONN_STR = 'mongodb://localhost:27017/pm25'; //# 数据库为 runoob
-MongoClient.connect(DB_CONN_STR, function(err, db) {
+MongoClient.connect(global.dburl, function(err, db) {
     console.log("成功连接数据库");
     //创建udp监听服务
     serverSocket.on('message', function(msg, rinfo){
@@ -51,13 +55,3 @@ MongoClient.connect(DB_CONN_STR, function(err, db) {
 //    serverSocket.send(msg, 0, msg.length, rinfo.port, rinfo.address);
 });
 
-//    err - Error object, https://nodejs.org/api/errors.html
-serverSocket.on('error', function(err){
-    console.log('error, msg - %s, stack - %s\n', err.message, err.stack);
-});
-
-serverSocket.on('listening', function(){
-    console.log("echo server is listening on port 7.");
-})
-
-serverSocket.bind(7);

@@ -3,16 +3,18 @@
 /**
  * Module dependencies.
  */
-
+//全局参数设置
+global.dburl = 'mongodb://localhost:27018/pm25';
 var app = require('../app');
 var debug = require('debug')('exp2:server');
 var http = require('http');
-
+global.listenport = 6082;
+global.hostip = '127.0.0.1';
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '6083');
 app.set('port', port);
 
 /**
@@ -90,4 +92,6 @@ function onListening() {
 }
 //以上是web服务启动
 //以下是socket服务启动
-var recserver = require('../dgram');
+//var recserver = require('../dgram');
+
+var tcp = require('../tcp');
