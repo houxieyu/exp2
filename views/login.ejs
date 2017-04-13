@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<head>
+    <title>PM环保实时监测系统</title>
+</head>
+<link href="/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+<link rel='stylesheet' href='/public/stylesheets/signin.css' />
+<div class="container-fluid">
+
+    <form class="form-signin"  action="/checklog">
+        <h2 class="form-signin-heading">请登录</h2>
+        <label for="username" class="sr-only">用户名</label>
+        <input type="text" name="username"  class="form-control" placeholder="用户名" required autofocus>
+        <label for="inputPassword" class="sr-only">密码</label>
+        <input type="password" name="pwd" class="form-control" placeholder="密码" required>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="remember-me"> 保存用户名
+            </label>
+        </div>
+        <a href="/index">点我登录</a>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+    </form>
+
+</div> <!-- /container -->

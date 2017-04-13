@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+
+</head>
+<body>
+<% include ../public/head.html %>
+<script src="/public/echarts.min.js"></script>
+<script src="/public/shine.js"></script>
+<script src="/public/recchart.js"></script>
+<div class="container-fluid" style="padding-top: 5px">
+    <h2><%= title %></h2>
+    <table class="easyui-datagrid" title="PM2.5数据表格" id="submpigrid" style="width: 1024px;"
+           singleSelect="true" pageSize="10"  pagination="true" fitColumns="true">
+        <thead>
+        <tr>
+            <th data-options="field:'id'">设备ID</th>
+            <th data-options="field:'wendu'">温度</th>
+            <th data-options="field:'shidu'">湿度</th>
+            <th data-options="field:'pm25'" >PM2.5</th>
+            <th data-options="field:'pm10'">PM10</th>
+            <th data-options="field:'fengsu'">风速</th>
+            <th data-options="field:'fengxiang'">风向</th>
+            <th data-options="field:'zaosheng'">噪声</th>
+            <th data-options="field:'time'">上传时间</th>
+        </tr>
+        </thead>
+    </table>
+  <br>
+    <h2>数据图形</h2>
+<div id="chart" style="width: 1024px;height: 400px;"></div>
+</div>
+</body>
+</html>
+<script>
+    $(function () {
+        var datas = '<%- JSON.stringify(rows) %>';
+        datas = JSON.parse(datas);
+        showchart(datas);
+        $('#submpigrid').datagrid({loadFilter:pagerFilter}).datagrid('loadData',datas );
+/*        $('#submpigrid').datagrid({
+            data: datas
+        });*/
+        function pagerFilter(data){
+            if (typeof data.length == 'number' && typeof data.splice == 'function'){    // 判断数据是否是数组
+                data = {
+                    total: data.length,
+                    rows: data
+                }
+            }
+            var dg = $(this);
+            var opts = dg.datagrid('options');
+            var pager = dg.datagrid('getPager');
+            pager.pagination({
+                onSelectPage:function(pageNum, pageSize){
+                    opts.pageNumber = pageNum;
+                    opts.pageSize = pageSize;
+                    pager.pagination('refresh',{
+                        pageNumber:pageNum,
+                        pageSize:pageSize
+                    });
+                    dg.datagrid('loadData',data);
+                }
+            });
+            if (!data.originalRows){
+                data.originalRows = (data.rows);
+            }
+            var start = (opts.pageNumber-1)*parseInt(opts.pageSize);
+            var end = start + parseInt(opts.pageSize);
+            data.rows = (data.originalRows.slice(start, end));
+            return data;
+        }
+    })
+
+</script>

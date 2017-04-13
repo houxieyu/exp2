@@ -1,0 +1,27 @@
+<link href="/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+<link href="/lib/easyui/themes/black/easyui.css" rel="stylesheet">
+<script src="/lib/easyui/jquery.min.js"></script>
+<script src="/lib/easyui/jquery.easyui.min.js"></script>
+<link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/demo/demo.css">
+<link rel='stylesheet' href='/public/stylesheets/style.css' />
+<div class="container-fluid" >
+    <div class="row" id="tophead"
+         style="border-radius: 10px; background-color: #2586a5; background: linear-gradient(180deg,#033583,#bdcfeb); color: #ffffff; padding-top: 10px; padding-bottom: 10px;">
+        <span id="title" style="font-size: xx-large; color: #ffffff; font-family: 'Microsoft YaHei';margin-left: 20px;">PM环保实时监测系统</span>
+        <span style="vertical-align: middle;display:inline-block; margin-left: 20px; ">当前用户：<%= user %></span>
+        <ul class="nav navbar-nav navbar-right" style="color: white;margin-right: 20px;">
+
+            <li><a runat="server" href="/quit" style="color: white;">退出</a></li>
+            <li><a runat="server" href="#" style="color: white;">帮助</a></li>
+            <li><a runat="server" href="#" style="color: white;">关于</a></li>
+        </ul>
+    </div>
+    <div class="row" id="bar" style="text-align: right;border-bottom:2px solid  gray;">
+        <ul class="nav nav-pills">
+            <li><a href="/index">首页</a></li>
+            <li><a href="/device">设备管理</a></li>
+            <li><a href="/users">用户管理</a></li>
+        </ul>
+    </div>
+</div>

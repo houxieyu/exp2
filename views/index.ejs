@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <script>
+        function detail() {
+            var row = $('#submpigrid').datagrid('getSelected');
+            if (row) {
+                location.href='/recdetail?id='+row._id;
+            }
+        }
+    </script>
+</head>
+<body>
+<% include ../public/head.html %>
+<div class="container-fluid">
+    <h2><%= title %></h2>
+    <table class="easyui-datagrid" title="PM2.5数据表格" id="submpigrid" style="width: 1024px;" toolbar="#toolbar"
+           data-options="singleSelect:true,pageSize:20" fitColumns="true">
+        <thead>
+        <tr>
+            <th data-options="field:'_id'">设备ID</th>
+            <th data-options="field:'wendu'">温度</th>
+            <th data-options="field:'shidu'">湿度</th>
+            <th data-options="field:'pm25'" >PM2.5</th>
+            <th data-options="field:'pm10'">PM10</th>
+            <th data-options="field:'fengsu'">风速</th>
+            <th data-options="field:'fengxiang'">风向</th>
+            <th data-options="field:'zaosheng'">噪声</th>
+            <th data-options="field:'time'">最近上传时间</th>
+            <th data-options="field:'fromnow'">间隔时间</th>
+            <th data-options="field:'reccount'">记录条数</th>
+            <th data-options="field:'owner'">用户名</th>
+        </tr>
+        </thead>
+    </table>
+    <div id="toolbar">
+        <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="detail()">查看详细</a>
+    </div>
+</div>
+</body>
+</html>
+<script>
+    $(function () {
+        var datas = '<%- JSON.stringify(datas) %>';
+        datas = JSON.parse(datas);
+        $('#submpigrid').datagrid({
+            data: datas
+        });
+    })
+</script>

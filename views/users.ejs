@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script>
+        function newDev() {
+            $('#dlg').dialog('open').dialog('setTitle', '新增用户');
+            $('#fm').form('clear');
+            url = '/user/create';
+        }
+        function savepwd() {
+            $('#fmp').form('submit', {
+                url: url,
+                onSubmit: function () {
+                    return $(this).form('validate');
+                },
+                success: function (result) {
+                    var result = eval('(' + result + ')');
+                    if (result.success) {
+                        $('#dlgp').dialog('close');		// close the dialog
+                        $('#dg').datagrid('reload');	// reload the user data
+                    } else {
+                        $.messager.show({
+                            title: 'Error',
+                            msg: result.msg
+                        });
+                    }
+                }
+            });
+        }
+        function saveDev() {
+            $('#fm').form('submit', {
+                url: url,
+                onSubmit: function () {
+                    return $(this).form('validate');
+                },
+                success: function (result) {
+                    var result = eval('(' + result + ')');
+                    if (result.success) {
+                        $('#dlg').dialog('close');		// close the dialog
+                        $('#dg').datagrid('reload');	// reload the user data
+                    } else {
+                        $.messager.show({
+                            title: 'Error',
+                            msg: result.msg
+                        });
+                    }
+                }
+            });
+        }
+        function editDev(){
+            var row = $('#dg').datagrid('getSelected');
+            if (row){
+                if(row.username == 'admin'){
+                    $.messager.alert('管理员不能修改');
+                    return;
+                }
+                $('#dlg').dialog('open').dialog('setTitle','修改用户信息');
+                $('#fm').form('load',row);
+                url = '/user/update?username='+row.username;
+            }
+        }
+        function setpwd(){
+            var row = $('#dg').datagrid('getSelected');
+            if (row){
+                $('#dlgp').dialog('open').dialog('setTitle','修改用户密码');
+                $('#fmp').form('load',row);
+                url = '/user/setpwd?username='+row.username;
+            }
+        }
+        function removeDev(){
+            var row = $('#dg').datagrid('getSelected');
+            if (row){
+                if(row.username == 'admin'){
+                    $.messager.alert('管理员不能删除');
+                    return;
+                }
+                $.messager.confirm('警告','确认要删除？',function(r){
+                    if (r){
+                        $.post('/user/delete',{username:row.username},function(result){
+                            if (result.success){
+                                $('#dg').datagrid('reload');	// reload the user data
+                            } else {
+                                $.messager.show({	// show error message
+                                    title: 'Error',
+                                    msg: result.msg
+                                });
+                            }
+                        },'json');
+                    }
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+<% include ../public/head.html %>
+
+<div class="container-fluid" >
+    <h2><%=title%></h2>
+        <table id="dg" title="用户管理" class="easyui-datagrid" style="width:1024px;"
+               url="/user/list" method='get' fitColumns="true"
+               toolbar="#toolbar"
+               rownumbers="true" fitColumns="true" singleSelect="true">
+            <thead>
+            <tr>
+                <th field="username" width="50">用户名称</th>
+                <th field="role" width="50">用户权限</th>
+            </tr>
+            </thead>
+        </table>
+        <div id="toolbar">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newDev()">新建用户</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editDev()">修改用户</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="removeDev()">删除用户</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="setpwd()">修改密码</a>
+        </div>
+        <div id="dlg" class="easyui-dialog" style="width:400px;height:350px;padding:10px 20px"
+             closed="true" buttons="#dlg-buttons">
+            <div class="ftitle">用户信息</div>
+            <form id="fm" method="post">
+                <div class="fitem">
+                    <label>用户名称:</label>
+                    <input name="username" class="easyui-validatebox" required="true" validType="length[1,20]">
+                </div>
+                <div class="fitem">
+                    <label>用户权限:</label>
+                    <select name="role"  class="easyui-combobox"  style="width:200px;">
+                        <option value="管理员">管理员</option>
+                        <option value="普通用户">普通用户</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+        <div id="dlg-buttons">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveDev()">保存</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">取消</a>
+        </div>
+    <div id="dlgp" class="easyui-dialog" style="width:400px;height:350px;padding:10px 20px"
+         closed="true" buttons="#dlgp-buttons">
+        <div class="ftitle">修改密码</div>
+        <form id="fmp" method="post">
+            <div class="fitem">
+                <label>新密码:</label>
+                <input name="pwd" class="easyui-validatebox" required="true" validType="length[1,20]">
+            </div>
+        </form>
+    </div>
+    <div id="dlgp-buttons">
+        <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="savepwd()">保存</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlgp').dialog('close')">取消</a>
+    </div>
+</div>
+</body>
+</html>
